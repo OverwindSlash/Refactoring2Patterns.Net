@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\State\State.PermissionControl.Finish\State.PermissionControl.Finish.csproj" />
+    <ProjectReference Include="..\State.PermissionControl.Finish\State.PermissionControl.Finish.csproj" />
   </ItemGroup>
 
 </Project>

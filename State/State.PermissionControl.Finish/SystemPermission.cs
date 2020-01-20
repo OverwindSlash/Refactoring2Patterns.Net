@@ -7,37 +7,67 @@
     // 这可以通过 state 模式简化
     public class SystemPermission
     {
-        private readonly SystemProfile _profile;
+        private SystemProfile _profile;
         private readonly SystemUser _requestor;
-        private readonly SystemAdmin _admin;
+        private SystemAdmin _admin;
         private bool _granted;
         // UNIX 权限相关的变量
         private bool _unixPermissionGranted;
-        private string _state;
+        private PermissionState _state;
 
-        public static readonly string REQUESTED = "REQUESTED";
-        public static readonly string CLAIMED = "CLAIMED";
-        public static readonly string GRANTED = "GRANTED";
-        public static readonly string DENIED = "DENIED";
-        // UNIX 权限相关的状态值
-        public static readonly string UNIX_REQUESTED = "UNIX_REQUESTED";
-        public static readonly string UNIX_CLAIMED = "UNIX_CLAIMED";
+        //public static readonly string REQUESTED = "REQUESTED";
+        //public static readonly string CLAIMED = "CLAIMED";
+        //public static readonly string GRANTED = "GRANTED";
+        //public static readonly string DENIED = "DENIED";
+        //// UNIX 权限相关的状态值
+        //public static readonly string UNIX_REQUESTED = "UNIX_REQUESTED";
+        //public static readonly string UNIX_CLAIMED = "UNIX_CLAIMED";
 
         public SystemPermission(SystemUser requestor, SystemProfile profile)
         {
-            _admin = new SystemAdmin();
+            Admin = new SystemAdmin();
             _requestor = requestor;
-            _profile = profile;
+            Profile = profile;
             if (profile.IsUnixPermissionRequired())
             {
-                _state = UNIX_REQUESTED;
+                State = PermissionState.UNIX_REQUESTED;
             }
             else
             {
-                _state = REQUESTED;
+                State = PermissionState.REQUESTED;
             }
-            _granted = false;
+            Granted = false;
             notifyAdminOfPermissionRequest();
+        }
+
+        public PermissionState State
+        {
+            get => _state;
+            set => _state = value;
+        }
+
+        public SystemAdmin Admin
+        {
+            get => _admin;
+            set => _admin = value;
+        }
+
+        public SystemProfile Profile
+        {
+            get => _profile;
+            set => _profile = value;
+        }
+
+        public bool UnixPermissionGranted
+        {
+            get => _unixPermissionGranted;
+            set => _unixPermissionGranted = value;
+        }
+
+        public bool Granted
+        {
+            get => _granted;
+            set => _granted = value;
         }
 
         private void notifyAdminOfPermissionRequest()
@@ -47,108 +77,48 @@
 
         public void ClaimedBy(SystemAdmin admin)
         {
-            #region original process logic
-            //if (!state.Equals(REQUESTED))
-            //    return;
-            //willBeHandledBy(admin);
-            //state = CLAIMED; 
-            #endregion
-
-            // 添加 UNIX 权限相关逻辑
-            if (!_state.Equals(REQUESTED) && !_state.Equals(UNIX_REQUESTED))
-                return;
-            WillBeHandledBy(admin);
-            if (_state.Equals(REQUESTED))
-                _state = CLAIMED;
-            else if (_state.Equals(UNIX_REQUESTED))
-                _state = UNIX_CLAIMED;
-
+            _state.ClaimedBy(admin, this);
         }
 
-        private void WillBeHandledBy(SystemAdmin systemAdmin)
+        /*private void WillBeHandledBy(SystemAdmin systemAdmin)
         {
             // handle code goes here.
+        }*/
+
+        public void GrantedBy(SystemAdmin admin)
+        {
+            _state.GrantedBy(admin, this);
         }
 
-        public void DeniedBy(SystemAdmin admin)
+        /*private void NotifyUnixAdminsOfPermissionRequest()
         {
-            #region original process logic
-            //if (!state.Equals(CLAIMED))
-            //    return;
-            //if (!this.admin.Equals(admin))
-            //    return;
-            //granted = false;
-            //state = DENIED;
-            //notifyUserOfPermissionRequestResult(); 
-            #endregion
-
-            // 添加 UNIX 权限相关逻辑
-            if (!_state.Equals(CLAIMED) && !_state.Equals(UNIX_CLAIMED))
-                return;
-            if (!this._admin.Equals(admin))
-                return;
-            _granted = false;
-            _unixPermissionGranted = false;
-            _state = DENIED;
-            NotifyUserOfPermissionRequestResult();
+            // notify code goes here.
         }
 
         private void NotifyUserOfPermissionRequestResult()
         {
             // notify code goes here.
-        }
+        }*/
 
-        public void GrantedBy(SystemAdmin admin)
+        public void DeniedBy(SystemAdmin admin)
         {
-            #region original process logic
-            //if (!state.Equals(CLAIMED))
-            //    return;
-            //if (!this.admin.Equals(admin))
-            //    return;
-            //state = GRANTED;
-            //granted = true;
-            //notifyUserOfPermissionRequestResult(); 
-            #endregion
-
-            // 添加 UNIX 权限相关逻辑
-            if (!_state.Equals(CLAIMED) && !_state.Equals(UNIX_CLAIMED))
-                return;
-            if (!_admin.Equals(admin))
-                return;
-
-            if (_profile.IsUnixPermissionRequired() && _state.Equals(UNIX_CLAIMED))
-                _unixPermissionGranted = true;
-            else if (_profile.IsUnixPermissionRequired() && !IsUnixPermissionGranted())
-            {
-                _state = UNIX_REQUESTED;
-                NotifyUnixAdminsOfPermissionRequest();
-                return;
-            }
-            _state = GRANTED;
-            _granted = true;
-            NotifyUserOfPermissionRequestResult();
-
+            _state.DeniedBy(admin, this);
         }
-
-        private void NotifyUnixAdminsOfPermissionRequest()
-        {
-            // notify code goes here.
-        }
-
-        public string GetState()
+        
+        public PermissionState GetState()
         {
             return _state;
         }
 
         public bool IsGranted()
         {
-            return _granted;
+            return Granted;
         }
 
         // UNIX 权限相关的变量的 get 函数
-        private bool IsUnixPermissionGranted()
+        internal bool IsUnixPermissionGranted()
         {
-            return _unixPermissionGranted;
+            return UnixPermissionGranted;
         }
     }
 }

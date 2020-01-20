@@ -11,11 +11,11 @@ namespace State.PermissionControl.Finish.Tests
             SystemUser user = new SystemUser();
             SystemProfile profile = new SystemProfile();
             SystemPermission permission = new SystemPermission(user, profile);
-            Assert.AreEqual(SystemPermission.REQUESTED, permission.GetState());
+            Assert.AreEqual(PermissionState.REQUESTED, permission.GetState());
 
             SystemAdmin admin = new SystemAdmin();
             permission.ClaimedBy(admin);
-            Assert.AreEqual(SystemPermission.CLAIMED, permission.GetState());
+            Assert.AreEqual(PermissionState.CLAIMED, permission.GetState());
             Assert.AreEqual(false, permission.IsGranted());
         }
 
@@ -26,11 +26,11 @@ namespace State.PermissionControl.Finish.Tests
             SystemProfile profile = new SystemProfile();
             profile.SetUnixPermissionRequired(true);
             SystemPermission permission = new SystemPermission(user, profile);
-            Assert.AreEqual(SystemPermission.UNIX_REQUESTED, permission.GetState());
+            Assert.AreEqual(PermissionState.UNIX_REQUESTED, permission.GetState());
 
             SystemAdmin admin = new SystemAdmin();
             permission.ClaimedBy(admin);
-            Assert.AreEqual(SystemPermission.UNIX_CLAIMED, permission.GetState());
+            Assert.AreEqual(PermissionState.UNIX_CLAIMED, permission.GetState());
             Assert.AreEqual(false, permission.IsGranted());
         }
 
@@ -40,15 +40,15 @@ namespace State.PermissionControl.Finish.Tests
             SystemUser user = new SystemUser();
             SystemProfile profile = new SystemProfile();
             SystemPermission permission = new SystemPermission(user, profile);
-            Assert.AreEqual(SystemPermission.REQUESTED, permission.GetState());
+            Assert.AreEqual(PermissionState.REQUESTED, permission.GetState());
 
             SystemAdmin admin = new SystemAdmin();
             permission.ClaimedBy(admin);
-            Assert.AreEqual(SystemPermission.CLAIMED, permission.GetState());
+            Assert.AreEqual(PermissionState.CLAIMED, permission.GetState());
             Assert.AreEqual(false, permission.IsGranted());
 
             permission.GrantedBy(admin);
-            Assert.AreEqual(SystemPermission.GRANTED, permission.GetState());
+            Assert.AreEqual(PermissionState.GRANTED, permission.GetState());
             Assert.AreEqual(true, permission.IsGranted());
         }
 
@@ -59,15 +59,15 @@ namespace State.PermissionControl.Finish.Tests
             SystemProfile profile = new SystemProfile();
             profile.SetUnixPermissionRequired(true);
             SystemPermission permission = new SystemPermission(user, profile);
-            Assert.AreEqual(SystemPermission.UNIX_REQUESTED, permission.GetState());
+            Assert.AreEqual(PermissionState.UNIX_REQUESTED, permission.GetState());
 
             SystemAdmin admin = new SystemAdmin();
             permission.ClaimedBy(admin);
-            Assert.AreEqual(SystemPermission.UNIX_CLAIMED, permission.GetState());
+            Assert.AreEqual(PermissionState.UNIX_CLAIMED, permission.GetState());
             Assert.AreEqual(false, permission.IsGranted());
 
             permission.GrantedBy(admin);
-            Assert.AreEqual(SystemPermission.GRANTED, permission.GetState());
+            Assert.AreEqual(PermissionState.GRANTED, permission.GetState());
             Assert.AreEqual(true, permission.IsGranted());
         }
 
@@ -77,15 +77,15 @@ namespace State.PermissionControl.Finish.Tests
             SystemUser user = new SystemUser();
             SystemProfile profile = new SystemProfile();
             SystemPermission permission = new SystemPermission(user, profile);
-            Assert.AreEqual(SystemPermission.REQUESTED, permission.GetState());
+            Assert.AreEqual(PermissionState.REQUESTED, permission.GetState());
 
             SystemAdmin admin = new SystemAdmin();
             permission.ClaimedBy(admin);
-            Assert.AreEqual(SystemPermission.CLAIMED, permission.GetState());
+            Assert.AreEqual(PermissionState.CLAIMED, permission.GetState());
             Assert.AreEqual(false, permission.IsGranted());
 
             permission.DeniedBy(admin);
-            Assert.AreEqual(SystemPermission.DENIED, permission.GetState());
+            Assert.AreEqual(PermissionState.DENIED, permission.GetState());
             Assert.AreEqual(false, permission.IsGranted());
         }
 
@@ -96,15 +96,15 @@ namespace State.PermissionControl.Finish.Tests
             SystemProfile profile = new SystemProfile();
             profile.SetUnixPermissionRequired(true);
             SystemPermission permission = new SystemPermission(user, profile);
-            Assert.AreEqual(SystemPermission.UNIX_REQUESTED, permission.GetState());
+            Assert.AreEqual(PermissionState.UNIX_REQUESTED, permission.GetState());
 
             SystemAdmin admin = new SystemAdmin();
             permission.ClaimedBy(admin);
-            Assert.AreEqual(SystemPermission.UNIX_CLAIMED, permission.GetState());
+            Assert.AreEqual(PermissionState.UNIX_CLAIMED, permission.GetState());
             Assert.AreEqual(false, permission.IsGranted());
 
             permission.GrantedBy(admin);
-            Assert.AreEqual(SystemPermission.GRANTED, permission.GetState());
+            Assert.AreEqual(PermissionState.GRANTED, permission.GetState());
             Assert.AreEqual(true, permission.IsGranted());
         }
     }

@@ -57,45 +57,18 @@
             // 添加 UNIX 权限相关逻辑
             if (!_state.Equals(REQUESTED) && !_state.Equals(UNIX_REQUESTED))
                 return;
+
             WillBeHandledBy(admin);
+
             if (_state.Equals(REQUESTED))
                 _state = CLAIMED;
             else if (_state.Equals(UNIX_REQUESTED))
                 _state = UNIX_CLAIMED;
-
         }
 
         private void WillBeHandledBy(SystemAdmin systemAdmin)
         {
             // handle code goes here.
-        }
-
-        public void DeniedBy(SystemAdmin admin)
-        {
-            #region original process logic
-            //if (!state.Equals(CLAIMED))
-            //    return;
-            //if (!this.admin.Equals(admin))
-            //    return;
-            //granted = false;
-            //state = DENIED;
-            //notifyUserOfPermissionRequestResult(); 
-            #endregion
-
-            // 添加 UNIX 权限相关逻辑
-            if (!_state.Equals(CLAIMED) && !_state.Equals(UNIX_CLAIMED))
-                return;
-            if (!this._admin.Equals(admin))
-                return;
-            _granted = false;
-            _unixPermissionGranted = false;
-            _state = DENIED;
-            NotifyUserOfPermissionRequestResult();
-        }
-
-        private void NotifyUserOfPermissionRequestResult()
-        {
-            // notify code goes here.
         }
 
         public void GrantedBy(SystemAdmin admin)
@@ -113,11 +86,14 @@
             // 添加 UNIX 权限相关逻辑
             if (!_state.Equals(CLAIMED) && !_state.Equals(UNIX_CLAIMED))
                 return;
+
             if (!_admin.Equals(admin))
                 return;
 
             if (_profile.IsUnixPermissionRequired() && _state.Equals(UNIX_CLAIMED))
+            {
                 _unixPermissionGranted = true;
+            }
             else if (_profile.IsUnixPermissionRequired() && !IsUnixPermissionGranted())
             {
                 _state = UNIX_REQUESTED;
@@ -127,12 +103,41 @@
             _state = GRANTED;
             _granted = true;
             NotifyUserOfPermissionRequestResult();
-
         }
 
         private void NotifyUnixAdminsOfPermissionRequest()
         {
             // notify code goes here.
+        }
+
+        private void NotifyUserOfPermissionRequestResult()
+        {
+            // notify code goes here.
+        }
+
+        public void DeniedBy(SystemAdmin admin)
+        {
+            #region original process logic
+            //if (!state.Equals(CLAIMED))
+            //    return;
+            //if (!this.admin.Equals(admin))
+            //    return;
+            //granted = false;
+            //state = DENIED;
+            //notifyUserOfPermissionRequestResult(); 
+            #endregion
+
+            // 添加 UNIX 权限相关逻辑
+            if (!_state.Equals(CLAIMED) && !_state.Equals(UNIX_CLAIMED))
+                return;
+
+            if (!this._admin.Equals(admin))
+                return;
+
+            _granted = false;
+            _unixPermissionGranted = false;
+            _state = DENIED;
+            NotifyUserOfPermissionRequestResult();
         }
 
         public string GetState()
