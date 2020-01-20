@@ -37,21 +37,20 @@ namespace Strategy.LoanCalculator.Start
         {
             return new Loan(commitment, commitment, start, null, maturity, riskRating);
         }
+        public static Loan NewAdvisedLine(double commitment, Date start, Date expiry, int riskRating)
+        {
+            if (riskRating > 3) return null;
+            Loan advisedLine =
+                new Loan(commitment, 2, start, expiry, null, riskRating);
+            advisedLine.SetUnusedPercentage(0.1);
+            return advisedLine;
+        }
 
         public static Loan NewRevolver(double commitment, Date start, Date expiry, int riskRating)
         {
             Loan revoler = new Loan(commitment, 0, start, expiry, null, riskRating);
             revoler.SetUnusedPercentage(1.0);
             return revoler;
-        }
-
-        public static Loan NewAdvisedLine(double commitment, Date start, Date expiry, int riskRating)
-        {
-            if (riskRating > 3) return null;
-            Loan advisedLine =
-               new Loan(commitment, 2, start, expiry, null, riskRating);
-            advisedLine.SetUnusedPercentage(0.1);
-            return advisedLine;
         }
 
         public void Payment(double amount, Date date)
@@ -141,6 +140,5 @@ namespace Strategy.LoanCalculator.Start
         {
             return UnusedRiskFactors.GetFactors().ForRating(_riskRating);
         }
-
     }
 }

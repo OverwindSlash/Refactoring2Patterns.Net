@@ -1,4 +1,4 @@
-﻿namespace Strategy.LoanCalculator.Start
+﻿namespace Strategy.LoanCalculator.Finish
 {
     public static class UnusedRiskFactors
     {

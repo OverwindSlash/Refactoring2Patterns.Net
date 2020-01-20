@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Strategy.LoanCalculator.Start
+namespace Strategy.LoanCalculator.Finish
 {
     public class Date
     {

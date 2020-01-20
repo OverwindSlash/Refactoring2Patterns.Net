@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Strategy.LoanCalculator.Start.Tests
 {
     [TestClass]
-    public class LoanCalculatorTest
+    public class LoanCalculatorStartTest
     {
         [TestMethod]
         public void TestTermLoanSamePayments()
